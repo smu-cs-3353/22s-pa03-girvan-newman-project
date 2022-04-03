@@ -5,35 +5,23 @@
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
-#include <boost/locale.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graphml.hpp>
 #include <iostream>
 
 #include <ctime>
 
-int main()
-{
-    using namespace boost::locale;
-    using namespace std;
-    generator gen;
-    locale loc=gen("");
-    // Create system default locale
+int main() {
+    using namespace boost;
+    typedef adjacency_list<vecS, vecS, undirectedS, no_property, no_property> Graph;
+    typedef dynamic_properties Dproperty;
+    Graph g;
+    Dproperty dp;
 
-    locale::global(loc);
-    // Make it system global
+    std::ifstream graphFile ("../RandomGraphs/randomGraph.graphml");
 
-    cout.imbue(loc);
-    // Set as default locale for output
+    read_graphml(graphFile, g, dp);
 
-    cout <<format("Today {1,date} at {1,time} we had run our first localization example") % time(0)
-         <<endl;
 
-    cout<<"This is how we show numbers in this locale "<<as::number << 103.34 <<endl;
-    cout<<"This is how we show currency in this locale "<<as::currency << 103.34 <<endl;
-    cout<<"This is typical date in the locale "<<as::date << std::time(0) <<endl;
-    cout<<"This is typical time in the locale "<<as::time << std::time(0) <<endl;
-    cout<<"This is upper case "<<to_upper("Hello World!")<<endl;
-    cout<<"This is lower case "<<to_lower("Hello World!")<<endl;
-    cout<<"This is title case "<<to_title("Hello World!")<<endl;
-    cout<<"This is fold case "<<fold_case("Hello World!")<<endl;
 
 }
