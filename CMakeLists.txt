@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(22s_pa03_girvan_newman_a_loner_s_regret)
 
 add_executable(22s_pa03_girvan_newman_a_loner_s_regret
-        main.cpp)
+        src/main.cpp)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
