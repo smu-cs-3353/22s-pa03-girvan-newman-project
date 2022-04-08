@@ -3,8 +3,12 @@
 //
 #include <iostream>
 #include <map>
+#include <random>
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
+#include <random>
+
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphml.hpp>
 #include <boost/graph/breadth_first_search.hpp>
@@ -27,10 +31,13 @@ int main() {
     std::map<int, int> node_labels; //holds the current label for each node
     std::map<int, std::vector<int>> neighbor_nodes; //holds the labels of the current node's neighbors
 
-    // Printing edges
+    std::vector<int> nodes; //holds each node in the graph
+
     for (auto v : boost::make_iterator_range(vertices(g))) {
         std::cout << "Node " << v << std::endl;
         node_labels[v] = v; //Initializing each node with its own unique label
+
+        nodes.push_back(v); //adds the current node to the vector of nodes in the graph
 
         //the following code was found at: https://stackoverflow.com/questions/49898415/boost-library-how-to-get-neighbouring-nodes
         auto neighbors = boost::adjacent_vertices(v, g);
@@ -45,9 +52,13 @@ int main() {
     }
 
     while (true) {
-        //for (int woohoo = 0; woohoo < 2; woohoo += 1) {
+        std::shuffle(nodes.begin(), nodes.end(), std::mt19937(std::random_device()())); //randomly shuffles the order in which the nodes will be visited
+        for (int i : nodes) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
 
-        for (auto v: boost::make_iterator_range(vertices(g))) { //FIXME this needs to be done in a random order
+        for (int v : nodes) { //loops through each node (which are randomly sorted)
             std::cout << "Currently on node " << v << std::endl;
             std::unordered_map<int, int> label_frequency;
 
@@ -96,7 +107,6 @@ int main() {
         }
 
     }
-    //}
 
     //cout << node_labels[1] << endl;
 }
