@@ -44,29 +44,59 @@ int main() {
 //        }
     }
 
-    for (auto v : boost::make_iterator_range(vertices(g))) { //FIXME this needs to be done in a random order
-        std::cout << "Currently on node " << v << std::endl;
-        std::unordered_map<int, int> label_frequency;
+    while (true) {
+        //for (int woohoo = 0; woohoo < 2; woohoo += 1) {
 
-        int new_label = -1;
-        int new_label_frequency = 0;
+        for (auto v: boost::make_iterator_range(vertices(g))) { //FIXME this needs to be done in a random order
+            std::cout << "Currently on node " << v << std::endl;
+            std::unordered_map<int, int> label_frequency;
 
-        for (int i = 0; i < neighbor_nodes[v].size(); i++) {
-            label_frequency[node_labels[neighbor_nodes[v].at(i)]] += 1;
+            int new_label = -1;
+            int new_label_frequency = 0;
 
-            std::cout << label_frequency[node_labels[neighbor_nodes[v].at(i)]] << std::endl;
-            if (label_frequency[node_labels[neighbor_nodes[v].at(i)]] > new_label_frequency) { //FIXME if there are ties, it needs to be broken randomly
-                new_label = node_labels[neighbor_nodes[v].at(i)];
+            for (int i = 0; i < neighbor_nodes[v].size(); i++) {
+                label_frequency[node_labels[neighbor_nodes[v].at(i)]] += 1;
+
+                std::cout << label_frequency[node_labels[neighbor_nodes[v].at(i)]] << std::endl;
+                if (label_frequency[node_labels[neighbor_nodes[v].at(i)]] >
+                    new_label_frequency) { //FIXME if there are ties, it needs to be broken randomly
+                    new_label = node_labels[neighbor_nodes[v].at(i)];
+                }
+            }
+
+            node_labels[v] = new_label;
+
+        }
+
+        for (auto v: boost::make_iterator_range(vertices(g))) {
+            std::cout << "Node " << v << "'s label is " << node_labels[v] << std::endl;
+        }
+
+        bool endAlgo = true; //variable that tells the label propagation to stop
+
+        for (auto v: boost::make_iterator_range(vertices(g))) { //loops through every node
+            int inCommon = 0; //counts how many neighbor nodes have the same label as the current node
+
+            for (int i = 0; i < neighbor_nodes[v].size(); i++) {
+                if (node_labels[neighbor_nodes[v].at(i)] == node_labels[v]) { //if the current node and the neighbor node have the same label
+                    inCommon++;
+                }
+            }
+
+            double threshold = neighbor_nodes[v].size() / 2.0; //label propagation can stop if the current node has the same label as half (or more) of its neighbor nodes
+
+            if (inCommon < threshold) { //if the current node has a different label than most of its neighbors
+                endAlgo = false; //continue label propagation
+                break;
             }
         }
 
-        node_labels[v] = new_label;
+        if (endAlgo) {
+            break;
+        }
 
     }
-
-    for (auto v : boost::make_iterator_range(vertices(g))) {
-        std::cout << "Node " << v << "'s label is " << node_labels[v] << std::endl;
-    }
+    //}
 
     //cout << node_labels[1] << endl;
 }
