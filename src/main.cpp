@@ -24,7 +24,8 @@ int main() {
     Graph g;
     Dproperty dp;
 
-    std::ifstream graphFile ("../RandomGraphs/test.graphml");
+    //std::ifstream graphFile ("../RandomGraphs/randomGraph.graphml");
+    std::ifstream graphFile("../tester.graphml");
 
     read_graphml(graphFile, g, dp);
 
@@ -72,6 +73,7 @@ int main() {
                 if (label_frequency[node_labels[neighbor_nodes[v].at(i)]] >
                     new_label_frequency) { //FIXME if there are ties, it needs to be broken randomly
                     new_label = node_labels[neighbor_nodes[v].at(i)];
+                    new_label_frequency = label_frequency[node_labels[neighbor_nodes[v].at(i)]]; //updates the label frequency
                 }
             }
 
@@ -107,6 +109,8 @@ int main() {
         }
 
     }
+
+
 
     //cout << node_labels[1] << endl;
 }
