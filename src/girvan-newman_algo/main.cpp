@@ -37,6 +37,7 @@ int main() {
     for (int i = 0; i < g.m_vertices.at(0).m_out_edges.size(); i++){
         cout << g.m_vertices.at(0).m_out_edges[i].m_target << endl;
     }
+    edgeBetweenness(g);
 
     /*map <pair<Graph::vertex_descriptor, Graph::vertex_descriptor>, Graph::edge_descriptor> vertexToEdgeMap;
 
@@ -107,9 +108,9 @@ _Noreturn void edgeBetweenness (Graph g){
         src.push_back(v);
         map <Graph::vertex_descriptor, pair <double, double> > vertexScore;
         //g.m_vertices[v].m_property.m_value.first += 1;
-        pair<double,double> d (0,0);
-        vertexScore.insert(g.m_vertices.at(v),d)
-        vertexScore.at(v).first += 1;
+        //pair<double,double> d (0,0);
+        vertexScore[v].first += 1;
+        //vertexScore.at(v).first += 1;
         //vector <vector<Graph::vertex_descriptor> > edgePath;
         vector <map<Graph::vertex_descriptor,vector<Graph::vertex_descriptor> > > edgePaths;
 
@@ -127,10 +128,10 @@ _Noreturn void edgeBetweenness (Graph g){
                 for (int j = 0; j < edges.size(); j++){
                     if (!visited.at(edges[j].m_target)){
                         nextSrc.push_back(edges[j].m_target);
-                        vertexScore.at(edges[j].m_target).first += vertexScore.at(v).first += 1;
+                        vertexScore[edges[j].m_target].first += vertexScore[v].first;
                         if (currentPath.count(edges[j].m_target) == 0){
                             //pair <edges[j].m_target, vector<Graph::vertex_descriptor> >
-                            currentPath.insert(pair <edges[j].get_target(), vector<Graph::vertex_descriptor> >);
+                            //currentPath.insert(pair <edges[j].get_target(), vector<Graph::vertex_descriptor> >);
                         }
                     }
 
