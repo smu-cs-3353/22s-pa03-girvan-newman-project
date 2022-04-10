@@ -14,14 +14,18 @@
 #include <boost/range/irange.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/betweenness_centrality.hpp>
+#include <set>
 //#include <boost/fusion/include/push_back.hpp>
 
 using namespace boost;
 using namespace std;
+typedef property<vertex_name_t,pair<double,double> > VertexProperties;
+typedef property<edge_name_t, double> EdgeProperties;
+typedef adjacency_list<vecS, vecS, undirectedS, VertexProperties, EdgeProperties> Graph;
+typedef dynamic_properties Dproperty;
 
+_Noreturn void edgeBetweenness (Graph);
 int main() {
-    typedef adjacency_list<vecS, vecS, undirectedS, no_property, no_property> Graph;
-    typedef dynamic_properties Dproperty;
     Graph g;
     Dproperty dp;
 
@@ -30,7 +34,17 @@ int main() {
 
     read_graphml(graphFile, g, dp);
 
-    std::map<Graph::edge_descriptor, double> edge_centralities;
+    for (int i = 0; i < g.m_vertices.at(0).m_out_edges.size(); i++){
+        cout << g.m_vertices.at(0).m_out_edges[i].m_target << endl;
+    }
+
+    /*map <pair<Graph::vertex_descriptor, Graph::vertex_descriptor>, Graph::edge_descriptor> vertexToEdgeMap;
+
+    for (auto edge : boost::make_iterator_range(edges(g))) {
+        vertexToEdgeMap.insert(pair<edge.m_target, edge.m_target>, edge>)
+    }*/
+
+    /*std::map<Graph::edge_descriptor, double> edge_centralities;
     auto ecm = boost::make_assoc_property_map(edge_centralities);
 
 
@@ -56,11 +70,6 @@ int main() {
     for (int i = 0; i < edgesToBeRemoved.size(); i++)
         g.remove_edge(edgesToBeRemoved[i]);
 
-    brandes_betweenness_centrality(g, boost::edge_centrality_map(ecm));
-    for (auto edge : boost::make_iterator_range(edges(g)))
-        std::cout << edge_centralities.at(edge) << "\n";
-
-
 
     // Printing Adjacency List
     for (auto v : boost::make_iterator_range(vertices(g))) {
@@ -74,7 +83,7 @@ int main() {
 
     ofstream output("test.graphml");
 
-    write_graphml(output, g, dp, true);
+    write_graphml(output, g, dp, true);*/
 
 //    for (auto v : boost::make_iterator_range(vertices(g))) {
 //        std::cout << "Vertex descriptor #" << v;
@@ -87,4 +96,55 @@ int main() {
         std::cout << g.m_edges[0].m_source << "-" << g.m_edges[0].m_target << std::endl;
     }*/
     int i = 0;
+}
+
+
+_Noreturn void edgeBetweenness (Graph g){
+    std::map<Graph::edge_descriptor, double> edge_centralities;
+    for (auto v : boost::make_iterator_range(vertices(g))){
+        map <Graph::vertex_descriptor, bool> visited;
+        vector <Graph::vertex_descriptor> src;
+        src.push_back(v);
+        map <Graph::vertex_descriptor, pair <double, double> > vertexScore;
+        //g.m_vertices[v].m_property.m_value.first += 1;
+        pair<double,double> d (0,0);
+        vertexScore.insert(g.m_vertices.at(v),d)
+        vertexScore.at(v).first += 1;
+        //vector <vector<Graph::vertex_descriptor> > edgePath;
+        vector <map<Graph::vertex_descriptor,vector<Graph::vertex_descriptor> > > edgePaths;
+
+        for (auto v : boost::make_iterator_range(vertices(g)))
+            visited.insert(pair<Graph::vertex_descriptor,bool>(v,false));
+
+        while (true){
+            //visited.at(src) = true;
+            vector <Graph::vertex_descriptor> nextSrc;
+            map<Graph::vertex_descriptor,vector<Graph::vertex_descriptor> > currentPath;
+            for (int i = 0; i < src.size(); i++){
+                visited.at(src[i]) = true;
+                auto edges = g.m_vertices.at(src[i]).m_out_edges;
+
+                for (int j = 0; j < edges.size(); j++){
+                    if (!visited.at(edges[j].m_target)){
+                        nextSrc.push_back(edges[j].m_target);
+                        vertexScore.at(edges[j].m_target).first += vertexScore.at(v).first += 1;
+                        if (currentPath.count(edges[j].m_target) == 0){
+                            //pair <edges[j].m_target, vector<Graph::vertex_descriptor> >
+                            currentPath.insert(pair <edges[j].get_target(), vector<Graph::vertex_descriptor> >);
+                        }
+                    }
+
+                }
+
+
+            }
+
+
+
+        }
+
+    }
+
+
+
 }
