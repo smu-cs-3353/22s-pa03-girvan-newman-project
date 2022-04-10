@@ -24,12 +24,12 @@ typedef property<edge_name_t, double> EdgeProperties;
 typedef adjacency_list<vecS, vecS, undirectedS, VertexProperties, EdgeProperties> Graph;
 typedef dynamic_properties Dproperty;
 
-_Noreturn void edgeBetweenness (Graph);
+void edgeBetweenness (Graph);
 int main() {
     Graph g;
     Dproperty dp;
 
-    std::ifstream graphFile ("../RandomGraphs/barbell_example.graphml");
+    std::ifstream graphFile ("../RandomGraphs/test.graphml");
 
 
     read_graphml(graphFile, g, dp);
@@ -38,6 +38,7 @@ int main() {
         cout << g.m_vertices.at(0).m_out_edges[i].m_target << endl;
     }
     edgeBetweenness(g);
+    return 0;
 
     /*map <pair<Graph::vertex_descriptor, Graph::vertex_descriptor>, Graph::edge_descriptor> vertexToEdgeMap;
 
@@ -96,11 +97,10 @@ int main() {
     /*for (int i = 0; i < g.m_edges.size(); i++){
         std::cout << g.m_edges[0].m_source << "-" << g.m_edges[0].m_target << std::endl;
     }*/
-    int i = 0;
 }
 
 
-_Noreturn void edgeBetweenness (Graph g){
+void edgeBetweenness (Graph g){
     std::map<Graph::edge_descriptor, double> edge_centralities;
     for (auto v : boost::make_iterator_range(vertices(g))){
         map <Graph::vertex_descriptor, bool> visited;
@@ -110,6 +110,7 @@ _Noreturn void edgeBetweenness (Graph g){
         //g.m_vertices[v].m_property.m_value.first += 1;
         //pair<double,double> d (0,0);
         vertexScore[v].first += 1;
+        vertexScore[v].second += 1;
         //vertexScore.at(v).first += 1;
         //vector <vector<Graph::vertex_descriptor> > edgePath;
         vector <map<Graph::vertex_descriptor,vector<Graph::vertex_descriptor> > > edgePaths;
@@ -119,25 +120,31 @@ _Noreturn void edgeBetweenness (Graph g){
 
         while (true){
             //visited.at(src) = true;
+            for (int i = 0; i < src.size(); i++){
+                visited.at(src[i]) = true;
+            }
             vector <Graph::vertex_descriptor> nextSrc;
             map<Graph::vertex_descriptor,vector<Graph::vertex_descriptor> > currentPath;
             for (int i = 0; i < src.size(); i++){
-                visited.at(src[i]) = true;
                 auto edges = g.m_vertices.at(src[i]).m_out_edges;
 
                 for (int j = 0; j < edges.size(); j++){
                     if (!visited.at(edges[j].m_target)){
                         nextSrc.push_back(edges[j].m_target);
-                        vertexScore[edges[j].m_target].first += vertexScore[v].first;
-                        if (currentPath.count(edges[j].m_target) == 0){
-                            //pair <edges[j].m_target, vector<Graph::vertex_descriptor> >
-                            //currentPath.insert(pair <edges[j].get_target(), vector<Graph::vertex_descriptor> >);
-                        }
+                        vertexScore[edges[j].m_target].first += vertexScore[src[i]].first;
+                        vertexScore[edges[j].m_target].second = 1;
+                        currentPath[edges[j].m_target].push_back(src[i]);
                     }
 
                 }
 
 
+            }
+            if (nextSrc.size() == 0)
+                break;
+            else {
+                edgePaths.push_back(currentPath);
+                src = nextSrc;
             }
 
 
@@ -145,7 +152,5 @@ _Noreturn void edgeBetweenness (Graph g){
         }
 
     }
-
-
 
 }
