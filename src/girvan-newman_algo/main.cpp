@@ -12,25 +12,12 @@
 #include <boost/parameter/parameters.hpp>
 #include <boost/pending/indirect_cmp.hpp>
 #include <boost/range/irange.hpp>
+#include <boost/graph/dijkstra_shortest_paths.hpp>
+#include <boost/graph/betweenness_centrality.hpp>
+//#include <boost/fusion/include/push_back.hpp>
 
 using namespace boost;
-
-//// This class is apart of tests, trying to see how to calculate shortest paths and stuff
-template < typename TimeMap >
-class bfs_time_visitor : public default_bfs_visitor
-{
-    typedef typename property_traits< TimeMap >::value_type T;
-
-public:
-    bfs_time_visitor(TimeMap tmap, T& t) : m_timemap(tmap), m_time(t) {}
-    template < typename Vertex, typename Graph >
-    void discover_vertex(Vertex u, const Graph& g) const
-    {
-        put(m_timemap, u, m_time++);
-    }
-    TimeMap m_timemap;
-    T& m_time;
-};
+using namespace std;
 
 int main() {
     typedef adjacency_list<vecS, vecS, undirectedS, no_property, no_property> Graph;
@@ -38,58 +25,62 @@ int main() {
     Graph g;
     Dproperty dp;
 
-    std::ifstream graphFile ("../RandomGraphs/test.graphml");
+    std::ifstream graphFile ("../RandomGraphs/barbell_example.graphml");
 
 
     read_graphml(graphFile, g, dp);
 
-    //// Testing a few things here
-    //// Will most likely scrap unless I am onto something....
-    // Typedefs
-    typedef graph_traits< Graph >::vertices_size_type Size;
+    std::map<Graph::edge_descriptor, double> edge_centralities;
+    auto ecm = boost::make_assoc_property_map(edge_centralities);
 
-    // a vector to hold the discover time property for each vertex
-    std::vector< Size > dtime(num_vertices(g));
-    typedef iterator_property_map< std::vector< Size >::iterator,
-            property_map< Graph, vertex_index_t >::const_type >
-            dtime_pm_type;
-    dtime_pm_type dtime_pm(dtime.begin(), get(vertex_index, g));
 
-    Size time = 0;
+    brandes_betweenness_centrality(g, boost::edge_centrality_map(ecm));
 
-    bfs_time_visitor< dtime_pm_type > vis(dtime_pm, time);
-    breadth_first_search(g, vertex(4, g), visitor(vis));
+    double maxEdgeBetweeness = 0;
 
-    // Use std::sort to order the vertices by their discover time
-    std::vector< graph_traits< Graph >::vertices_size_type > discover_order(6);
-    integer_range< int > range(0, 6);
-    std::copy(range.begin(), range.end(), discover_order.begin());
-    std::sort(discover_order.begin(), discover_order.end(),
-              indirect_cmp< dtime_pm_type, std::less< Size > >(dtime_pm));
+    vector<Graph::edge_descriptor> edgesToBeRemoved;
 
-    std::cout << "order of discovery: ";
-    for (int i = 0; i < 6; ++i)
-        std::cout << discover_order[i] << " ";
-    std::cout << std::endl;
+    for (auto edge : boost::make_iterator_range(edges(g))) {
+        std::cout << edge_centralities.at(edge) << "\n";
 
-    //// End of testing things
-
-    // Printing edges
-    for (auto v : boost::make_iterator_range(vertices(g))) {
-        for (auto oe : make_iterator_range(out_edges(v, g))){
-            std::cout << "Edge " << oe << std::endl;
+        if (edge_centralities.at(edge) > maxEdgeBetweeness){
+            maxEdgeBetweeness = edge_centralities.at(edge);
+            edgesToBeRemoved.clear();
+            edgesToBeRemoved.push_back(edge);
         }
+        else if (edge_centralities.at(edge) == maxEdgeBetweeness)
+            edgesToBeRemoved.push_back(edge);
+
     }
 
+    for (int i = 0; i < edgesToBeRemoved.size(); i++)
+        g.remove_edge(edgesToBeRemoved[i]);
 
-//    for (auto vd : boost::make_iterator_range(vertices(g))) {
-//        std::cout << vd << std::endl;
-//    }
+    brandes_betweenness_centrality(g, boost::edge_centrality_map(ecm));
+    for (auto edge : boost::make_iterator_range(edges(g)))
+        std::cout << edge_centralities.at(edge) << "\n";
 
-//    Graph::vertex_iterator iter, iterEnd;
-//
-//    for (boost::tie(iter, iterEnd) = vertices(g); iter != iterEnd; ++iter) {
-//        std::cout << *iter << std::endl;
+
+
+    // Printing Adjacency List
+    for (auto v : boost::make_iterator_range(vertices(g))) {
+        //std::cout << "Vertex descriptor #" << v;
+        std::cout << v << ": ";
+        for (auto oe : make_iterator_range(out_edges(v, g))){
+            std::cout << oe.m_target << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    ofstream output("test.graphml");
+
+    write_graphml(output, g, dp, true);
+
+//    for (auto v : boost::make_iterator_range(vertices(g))) {
+//        std::cout << "Vertex descriptor #" << v;
+//        for (auto oe : make_iterator_range(out_edges(v, g))){
+//            std::cout << oe << std::endl;
+//        }
 //    }
 
     /*for (int i = 0; i < g.m_edges.size(); i++){
