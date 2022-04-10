@@ -24,27 +24,71 @@ typedef property<edge_name_t, double> EdgeProperties;
 typedef adjacency_list<vecS, vecS, undirectedS, VertexProperties, EdgeProperties> Graph;
 typedef dynamic_properties Dproperty;
 
-void edgeBetweenness (Graph);
+void scaling (std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> &);
+std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> edgeBetweenness (Graph&);
 int main() {
     Graph g;
     Dproperty dp;
 
-    std::ifstream graphFile ("../RandomGraphs/test.graphml");
+    std::ifstream graphFile ("../RandomGraphs/barbell_example.graphml");
 
 
     read_graphml(graphFile, g, dp);
 
-    for (int i = 0; i < g.m_vertices.at(0).m_out_edges.size(); i++){
-        cout << g.m_vertices.at(0).m_out_edges[i].m_target << endl;
+//    for (int i = 0; i < g.m_vertices.at(0).m_out_edges.size(); i++){
+//        cout << g.m_vertices.at(0).m_out_edges[i].m_target << endl;
+//    }
+
+    auto betweenness = edgeBetweenness(g);
+
+    vector <pair<Graph::vertex_descriptor,Graph::vertex_descriptor> > edgesToBeRemoved;
+    double maxBetweenness = 0;
+
+    for (auto const& iter : betweenness){
+        cout << "Edge: ( " << iter.first.first << ", " << iter.first.second << " ): " << iter.second << endl;
+
+        if (maxBetweenness < iter.second){
+            maxBetweenness = iter.second;
+            edgesToBeRemoved.clear();
+            edgesToBeRemoved.push_back(iter.first);
+        }
+        else if (maxBetweenness == iter.second)
+            edgesToBeRemoved.push_back(iter.first);
     }
-    edgeBetweenness(g);
+
+    cout << endl;
+
+    for (int i = 0; i < edgesToBeRemoved.size(); i++){
+        for (auto edge : boost::make_iterator_range(edges(g))){
+            if (edgesToBeRemoved[i].first == edge.m_source && edgesToBeRemoved[i].second == edge.m_target){
+                cout << "Removed Edge: " << edge << endl;
+                g.remove_edge(edge);
+                break;
+            }
+        }
+    }
+
+    cout << "\nBetweenness after edge removal:" << endl;
+
+    betweenness = edgeBetweenness(g);
+
+    edgesToBeRemoved.clear();
+    maxBetweenness = 0;
+
+    for (auto const& iter : betweenness){
+        cout << "Edge: ( " << iter.first.first << ", " << iter.first.second << " ): " << iter.second << endl;
+
+        if (maxBetweenness < iter.second){
+            maxBetweenness = iter.second;
+            edgesToBeRemoved.clear();
+            edgesToBeRemoved.push_back(iter.first);
+        }
+        else if (maxBetweenness == iter.second)
+            edgesToBeRemoved.push_back(iter.first);
+    }
+
+
     return 0;
-
-    /*map <pair<Graph::vertex_descriptor, Graph::vertex_descriptor>, Graph::edge_descriptor> vertexToEdgeMap;
-
-    for (auto edge : boost::make_iterator_range(edges(g))) {
-        vertexToEdgeMap.insert(pair<edge.m_target, edge.m_target>, edge>)
-    }*/
 
     /*std::map<Graph::edge_descriptor, double> edge_centralities;
     auto ecm = boost::make_assoc_property_map(edge_centralities);
@@ -99,19 +143,31 @@ int main() {
     }*/
 }
 
+void scaling (std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> &betweenness){
+    for (auto &iter : betweenness) {
+        iter.second /= 2;
+    }
 
-void edgeBetweenness (Graph g){
-    std::map<Graph::edge_descriptor, double> edge_centralities;
+}
+
+std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> edgeBetweenness (Graph &g){
+    std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> edge_centralities;
+    for (auto edge : boost::make_iterator_range(edges(g))) {
+        pair<Graph::vertex_descriptor, Graph::vertex_descriptor> w;
+        w.first = edge.m_source;
+        w.second = edge.m_target;
+        edge_centralities[w] = 0;
+    }
     for (auto v : boost::make_iterator_range(vertices(g))){
         map <Graph::vertex_descriptor, bool> visited;
         vector <Graph::vertex_descriptor> src;
         src.push_back(v);
-        map <Graph::vertex_descriptor, pair <double, double> > vertexScore;
+        map <Graph::vertex_descriptor, pair <double, double> > vScore;
         //g.m_vertices[v].m_property.m_value.first += 1;
         //pair<double,double> d (0,0);
-        vertexScore[v].first += 1;
-        vertexScore[v].second += 1;
-        //vertexScore.at(v).first += 1;
+        vScore[v].first += 1;
+        vScore[v].second += 1;
+        //vScore.at(v).first += 1;
         //vector <vector<Graph::vertex_descriptor> > edgePath;
         vector <map<Graph::vertex_descriptor,vector<Graph::vertex_descriptor> > > edgePaths;
 
@@ -131,8 +187,8 @@ void edgeBetweenness (Graph g){
                 for (int j = 0; j < edges.size(); j++){
                     if (!visited.at(edges[j].m_target)){
                         nextSrc.push_back(edges[j].m_target);
-                        vertexScore[edges[j].m_target].first += vertexScore[src[i]].first;
-                        vertexScore[edges[j].m_target].second = 1;
+                        vScore[edges[j].m_target].first += vScore[src[i]].first;
+                        vScore[edges[j].m_target].second = 1;
                         currentPath[edges[j].m_target].push_back(src[i]);
                     }
 
@@ -148,9 +204,40 @@ void edgeBetweenness (Graph g){
             }
 
 
+        }
+
+        //int i = 0;
+
+        //map<Graph::vertex_descriptor,vector<Graph::vertex_descriptor> >::iterator it;
+
+       // for (it = symbolTable.begin(); it != symbolTable.end(); it++)
+       for (int i = edgePaths.size() - 1; i > -1; i--){
+            auto levelNodes = edgePaths[i];
+
+            for (auto const& j : levelNodes){
+                auto edges = j.second;
+                for (int k = 0; k < edges.size(); k++){
+                    //g.m_vertices.at(src[i])
+                    double btwVal = vScore.at(j.first).second * vScore.at(edges[k]).first / vScore.at(j.first).first;
+                    pair <Graph::vertex_descriptor, Graph::vertex_descriptor> w;
+                    w.first = j.first;
+                    w.second = edges[k];
+                    if (edge_centralities.count(w) == 0) {
+                        w.first = edges[k];
+                        w.second = j.first;
+                    }
+                    edge_centralities.at(w) += btwVal;
+                    vScore.at(edges[k]).second += btwVal;
+
+                }
+            }
+
+
 
         }
 
     }
+    scaling (edge_centralities);
+    return edge_centralities;
 
 }
