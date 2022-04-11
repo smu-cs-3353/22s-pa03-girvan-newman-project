@@ -6,8 +6,9 @@ def start():
     
     #G = nx.write_graphml_lxml(H, "test.graphml")
     #X = nx.read_graphml('test.graphml')
-    X = nx.read_graphml("../RandomGraphs/randomGraph.graphml")
+    #X = nx.read_graphml("../RandomGraphs/randomGraph.graphml")
     #X = nx.read_graphml("../tester.graphml")
+    X = nx.read_graphml("../karateClub.graphml")
     nx.draw(X)
     plt.show()
 
