@@ -24,8 +24,9 @@ int main() {
     Graph g;
     Dproperty dp;
 
-    //std::ifstream graphFile ("../RandomGraphs/randomGraph.graphml");
-    std::ifstream graphFile("../tester.graphml");
+    std::ifstream graphFile ("../RandomGraphs/randomGraph.graphml");
+    //std::ifstream graphFile("../tester.graphml");
+    //std::ifstream graphFile("../RandomGraphs/bigGraph.graphml");
 
     read_graphml(graphFile, g, dp);
 
@@ -66,18 +67,31 @@ int main() {
             int new_label = -1;
             int new_label_frequency = 0;
 
+            std::vector<int> new_label_options;
+
             for (int i = 0; i < neighbor_nodes[v].size(); i++) {
                 label_frequency[node_labels[neighbor_nodes[v].at(i)]] += 1;
 
                 std::cout << label_frequency[node_labels[neighbor_nodes[v].at(i)]] << std::endl;
-                if (label_frequency[node_labels[neighbor_nodes[v].at(i)]] >
-                    new_label_frequency) { //FIXME if there are ties, it needs to be broken randomly
+                if (label_frequency[node_labels[neighbor_nodes[v].at(i)]] > new_label_frequency) {
                     new_label = node_labels[neighbor_nodes[v].at(i)];
                     new_label_frequency = label_frequency[node_labels[neighbor_nodes[v].at(i)]]; //updates the label frequency
+
+                    new_label_options.clear(); //clears the vector of options
+                } else if (label_frequency[node_labels[neighbor_nodes[v].at(i)]] == new_label_frequency) { //if multiple neighbor node labels have the same frequency
+                    if (new_label_options.empty()) {
+                        new_label_options.push_back(new_label);
+                    }
+                    new_label_options.push_back(node_labels[neighbor_nodes[v].at(i)]);
                 }
             }
 
-            node_labels[v] = new_label;
+            if (!new_label_options.empty()) { //if multiple neighbor node labels appear the same number of times
+                std::shuffle(new_label_options.begin(), new_label_options.end(), std::mt19937(std::random_device()())); //randomly shuffles the options
+                node_labels[v] = new_label_options.at(0);
+            } else {
+                node_labels[v] = new_label;
+            }
 
         }
 
