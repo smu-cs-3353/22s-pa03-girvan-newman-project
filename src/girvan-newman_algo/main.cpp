@@ -87,7 +87,7 @@ int main() {
 
         currModularity = calculateModularity(oldG, g);
 
-        if (count!=0 && maxModularity <= currModularity - 5){
+        if (maxModularity <= currModularity - 5 || isnan(currModularity)){
             cout << "Following the removal of the previous edge, the current modularity (" << currModularity
                  << ") went beyond the max modularity (" << maxModularity << ")\n"
                  << "As such the graph will regress back to the state prior to the removal of the last edge." << endl;
@@ -356,5 +356,6 @@ double calculateModularity(Graph& oldG, Graph& newG){
         }
 
     }
-    return res;;
+    //return res/(double)(oldG.m_edges.size() * 2);
+    return res;
 }
