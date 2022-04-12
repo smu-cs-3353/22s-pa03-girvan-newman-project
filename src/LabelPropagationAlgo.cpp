@@ -27,7 +27,6 @@ void LabelPropagationAlgo::runAlgo() {
     std::vector<int> nodes; //holds each node in the graph
 
     for (auto v : boost::make_iterator_range(vertices(g))) {
-        //std::cout << "Node " << v << std::endl; FIXME
         node_labels[v] = v; //Initializing each node with its own unique label
 
         nodes.push_back(v); //adds the current node to the vector of nodes in the graph
@@ -35,22 +34,15 @@ void LabelPropagationAlgo::runAlgo() {
         //the following code was found at: https://stackoverflow.com/questions/49898415/boost-library-how-to-get-neighbouring-nodes
         auto neighbors = boost::adjacent_vertices(v, g);
         for (auto vd : make_iterator_range(neighbors)) {
-            //std::cout << v << " has adjacent vertex " << vd << std::endl; FIXME
             neighbor_nodes[v].push_back(vd); //adds each neighboring node to the vector
         }
     }
 
     int counter = 1;
     while (true) { //loop that runs until all nodes have the same label as the majority of their neighbor nodes
-//        std::cout << "Iteration " << counter << std::endl; FIXME
         std::shuffle(nodes.begin(), nodes.end(), std::mt19937(std::random_device()())); //randomly shuffles the order in which the nodes will be visited
-//        for (int i : nodes) { FIXME
-//            std::cout << i << " ";
-//        }
-//        std::cout << std::endl;
 
         for (int v : nodes) { //loops through each node (which are randomly sorted)
-            //std::cout << "Currently on node " << v << std::endl; //FIXME
             std::unordered_map<int, int> label_frequency;
 
             int new_label = -1;
@@ -61,7 +53,6 @@ void LabelPropagationAlgo::runAlgo() {
             for (int i = 0; i < neighbor_nodes[v].size(); i++) {
                 label_frequency[node_labels[neighbor_nodes[v].at(i)]] += 1;
 
-                //std::cout << label_frequency[node_labels[neighbor_nodes[v].at(i)]] << std::endl; //FIXME
                 if (label_frequency[node_labels[neighbor_nodes[v].at(i)]] > new_label_frequency) {
                     new_label = node_labels[neighbor_nodes[v].at(i)];
                     new_label_frequency = label_frequency[node_labels[neighbor_nodes[v].at(i)]]; //updates the label frequency
@@ -75,20 +66,14 @@ void LabelPropagationAlgo::runAlgo() {
                 }
             }
 
-//            std::cout << "Old label: " << node_labels[v] << std::endl; FIXME
             if (!new_label_options.empty()) { //if multiple neighbor node labels appear the same number of times
                 std::shuffle(new_label_options.begin(), new_label_options.end(), std::mt19937(std::random_device()())); //randomly shuffles the options
                 node_labels[v] = new_label_options.at(0);
             } else {
                 node_labels[v] = new_label;
             }
-//            std::cout << "New label: " << node_labels[v] << std::endl; FIXME
 
         }
-
-//        for (auto v: boost::make_iterator_range(vertices(g))) { FIXME
-//            std::cout << "Node " << v << "'s label is " << node_labels[v] << std::endl;
-//        }
 
         bool endAlgo = true; //variable that tells the label propagation to stop
 
@@ -112,7 +97,6 @@ void LabelPropagationAlgo::runAlgo() {
             }
 
             if (inCommon < most_frequent_frequency) { //if the current node has a different label than the most frequent label among its neighbor nodes
-//                std::cout << "FAILED ON " << v << std::endl; FIXME
                 endAlgo = false; //continue label propagation
                 break;
             }
@@ -122,7 +106,6 @@ void LabelPropagationAlgo::runAlgo() {
             break;
         }
         counter++;
-//        std::cout << std::endl; FIXME
     }
 
     std::vector<int> labels; //holds all the labels that define each community
