@@ -49,11 +49,13 @@ int main() {
     double maxModularity = 100000;
     double currModularity =100000;
 
+    Graph oldG;
+
     while (true){
 //        if (count != 0)
 //            maxModularity = currModularity;
 
-        Graph oldG;
+        oldG = Graph();
         boost::copy_graph(g, oldG);
         auto betweenness = edgeBetweenness(g);
         vector <pair<Graph::vertex_descriptor,Graph::vertex_descriptor> > edgesToBeRemoved;
@@ -85,8 +87,8 @@ int main() {
 
         currModularity = calculateModularity(oldG, g);
 
-        if (count!=0 && maxModularity >= currModularity){
-            cout << "Following the removal of the previous edge, the current modularity (" << currModularity +0.05
+        if (count!=0 && maxModularity <= currModularity - 5){
+            cout << "Following the removal of the previous edge, the current modularity (" << currModularity
                  << ") went beyond the max modularity (" << maxModularity << ")\n"
                  << "As such the graph will regress back to the state prior to the removal of the last edge." << endl;
             g = oldG;
@@ -315,22 +317,33 @@ std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> edgeB
 
 double calculateModularity(Graph& oldG, Graph& newG){
 
-    //boost::adjacent_vertices(v,g);
-    //m_out_edges.size() for ki and kj
-
     double res = 0;
-
-    std::vector< double > componentOld(num_vertices(oldG));
-    double numCom_old = connected_components(oldG, &componentOld[0]);
-
-    std::vector< double > componentNew(num_vertices(oldG));
-    double numCom_new = connected_components(oldG, &componentNew[0]);
 
     for (auto oldV : boost::make_iterator_range(vertices(oldG))){
 
         auto adjacent_old = boost::adjacent_vertices(oldV,oldG);
+        int old_numAttached = 0;
+
+        for (auto buffer : make_iterator_range(adjacent_old))
+            old_numAttached++;
+        // Was met to find specific community for node, but not nodded
+        /*vector <Graph::vertex_descriptor> community;
+        bool arrived = false;
+        for (auto oldV2 : boost::make_iterator_range(vertices(oldG))){
+            if (oldV2 == oldV)
+                arrived = true;
+            if (arrived)
+                community.push_back(oldV2);
+        }*/
 
         for (auto newV : boost::make_iterator_range(vertices(newG))){
+
+            auto adjacent_new = boost::adjacent_vertices(newV,newG);
+            int new_numAttached = 0;
+
+            for (auto buffer : make_iterator_range(adjacent_new))
+                new_numAttached++;
+
             double A = 0;
             for (auto adj : make_iterator_range(adjacent_old)) {
                 if (adj == newV) {
@@ -339,11 +352,9 @@ double calculateModularity(Graph& oldG, Graph& newG){
                 }
             }
 
-            res += A - ((numCom_old * numCom_new) / (double)(oldG.m_edges.size() * 2));
-
+            res += A - ((old_numAttached * new_numAttached) / (double)(oldG.m_edges.size() * 2));
         }
 
     }
-
-    return res/(double)(oldG.m_edges.size() * 2);
+    return res;;
 }
