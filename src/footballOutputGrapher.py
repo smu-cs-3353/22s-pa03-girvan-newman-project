@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 
 val_map = { }
 
-f = open('../output.txt', 'r')
-f2 = open('../schoolNames.txt', 'r')
+f = open('../extra/output.txt', 'r')
+f2 = open('../extra/schoolNames.txt', 'r')
 
 for label in f:
     ID = next(f2).strip()
