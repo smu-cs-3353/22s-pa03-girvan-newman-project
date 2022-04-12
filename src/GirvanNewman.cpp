@@ -12,12 +12,9 @@ GirvanNewman::GirvanNewman() {
 
     std::ifstream graphFile ("../RandomGraphs/barbell_example.graphml");
 
-
     read_graphml(graphFile, g, dp);
 
     double edgeCount = g.m_edges.size();
-
-
 
     int count = 0;
 
@@ -27,8 +24,6 @@ GirvanNewman::GirvanNewman() {
     Graph oldG;
 
     while (true){
-//        if (count != 0)
-//            maxModularity = currModularity;
 
         oldG = Graph();
         boost::copy_graph(g, oldG);
@@ -83,18 +78,17 @@ GirvanNewman::GirvanNewman() {
     std::vector< int >::size_type i;
     cout << "Total number of components: " << num << endl;
     for (i = 0; i != component.size(); ++i)
-        cout << "Vertex " << i << " is in component " << component[i] << " -> real component "
-             << endl;
+        cout << "Vertex " << i << " is in component " << component[i] << endl;
     cout << endl;
 
-    ofstream output("test.graphml");
+    //ofstream output("test.graphml");
 
-    write_graphml(output, g, dp, true);
+    //write_graphml(output, g, dp, true);
 
-    ofstream output2("output.txt");
+    //ofstream output2("output.txt");
 
-    for (auto v : make_iterator_range(vertices(g)))
-        output2 << component [v] << endl;
+    //for (auto v : make_iterator_range(vertices(g)))
+    //    output2 << component [v] << endl;
 }
 
 void GirvanNewman::scaling (std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> &betweenness){
@@ -117,12 +111,8 @@ std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> Girva
         vector <Graph::vertex_descriptor> src;
         src.push_back(v);
         map <Graph::vertex_descriptor, pair <double, double> > vScore;
-        //g.m_vertices[v].m_property.m_value.first += 1;
-        //pair<double,double> d (0,0);
         vScore[v].first += 1;
         vScore[v].second += 1;
-        //vScore.at(v).first += 1;
-        //vector <vector<Graph::vertex_descriptor> > edgePath;
         vector <map<Graph::vertex_descriptor,vector<Graph::vertex_descriptor> > > edgePaths;
 
         for (auto v : boost::make_iterator_range(vertices(g)))
@@ -159,19 +149,12 @@ std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> Girva
 
 
         }
-
-        //int i = 0;
-
-        //map<Graph::vertex_descriptor,vector<Graph::vertex_descriptor> >::iterator it;
-
-        // for (it = symbolTable.begin(); it != symbolTable.end(); it++)
         for (int i = edgePaths.size() - 1; i > -1; i--){
             auto levelNodes = edgePaths[i];
 
             for (auto const& j : levelNodes){
                 auto edges = j.second;
                 for (int k = 0; k < edges.size(); k++){
-                    //g.m_vertices.at(src[i])
                     double btwVal = vScore.at(j.first).second * vScore.at(edges[k]).first / vScore.at(j.first).first;
                     pair <Graph::vertex_descriptor, Graph::vertex_descriptor> w;
                     w.first = j.first;
@@ -248,8 +231,6 @@ double GirvanNewman::calculateModularity(Graph& oldG, Graph& newG, double edgeCo
 //    return res;
 
     double res = 0;
-    std::vector< int > component(num_vertices(newG));
-    int num = connected_components(newG, &component[0]);
     map<int, vector<Graph::vertex_descriptor> > communities;
 
     for (auto newV : boost::make_iterator_range(vertices(newG)))
