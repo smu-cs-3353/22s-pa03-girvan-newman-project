@@ -1,9 +1,8 @@
-//
-// Created by mikec_g1kgiu8 on 4/4/2022.
-//
+#include "GirvanNewman.h"
 #include "LabelPropagationAlgo.h"
 
 int main() {
+    GirvanNewman();
     LabelPropagationAlgo secondAlgo;
     secondAlgo.runAlgo();
 }

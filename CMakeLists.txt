@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(22s_pa03_girvan_newman_a_loner_s_regret)
 
 add_executable(22s_pa03_girvan_newman_a_loner_s_regret
-        src/main.cpp src/LabelPropagationAlgo.h src/LabelPropagationAlgo.cpp)
+        src/main.cpp src/LabelPropagationAlgo.h src/LabelPropagationAlgo.cpp src/GirvanNewman.cpp src/GirvanNewman.h)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
