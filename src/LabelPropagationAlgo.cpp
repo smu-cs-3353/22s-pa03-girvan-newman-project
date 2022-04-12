@@ -131,4 +131,12 @@ void LabelPropagationAlgo::runAlgo() {
         }
 
     }
+
+    std::ofstream output("../output.txt");
+
+    for (auto v: boost::make_iterator_range(vertices(g))) {
+        output << node_labels[v] << std::endl;
+    }
+
+    output.close();
 }
