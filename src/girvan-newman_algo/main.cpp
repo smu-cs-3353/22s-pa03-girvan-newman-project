@@ -12,34 +12,95 @@
 #include <boost/parameter/parameters.hpp>
 #include <boost/pending/indirect_cmp.hpp>
 #include <boost/range/irange.hpp>
-#include <boost/graph/dijkstra_shortest_paths.hpp>
-#include <boost/graph/betweenness_centrality.hpp>
-#include <set>
-//#include <boost/fusion/include/push_back.hpp>
+#include <boost/graph/connected_components.hpp>
+#include <boost/graph/copy.hpp>
 
 using namespace boost;
 using namespace std;
-typedef property<vertex_name_t,pair<double,double> > VertexProperties;
-typedef property<edge_name_t, double> EdgeProperties;
-typedef adjacency_list<vecS, vecS, undirectedS, VertexProperties, EdgeProperties> Graph;
+typedef vertex_property<vertex_name_t> VertexProperties;
+typedef edge_property<edge_name_t> EdgeProperties;
+//typedef adjacency_list<vecS, vecS, undirectedS, VertexProperties, EdgeProperties> Graph;
+//typedef dynamic_properties Dproperty;
+
+struct VertexProperty { //stores the data key in football.graphml
+    long dataKey;
+};
+
+typedef adjacency_list<vecS, vecS, undirectedS, VertexProperty> Graph;
 typedef dynamic_properties Dproperty;
 
 void scaling (std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> &);
 std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> edgeBetweenness (Graph&);
+double calculateModularity(Graph&, Graph&);
+
 int main() {
     Graph g;
     Dproperty dp;
+
+    dp.property("value", boost::get(&VertexProperty::dataKey, g));
 
     std::ifstream graphFile ("../RandomGraphs/barbell_example.graphml");
 
 
     read_graphml(graphFile, g, dp);
 
+    int count = 0;
+
+    double maxModularity = 100000;
+    double currModularity =100000;
+
+    while (true){
+//        if (count != 0)
+//            maxModularity = currModularity;
+
+        Graph oldG;
+        boost::copy_graph(g, oldG);
+        auto betweenness = edgeBetweenness(g);
+        vector <pair<Graph::vertex_descriptor,Graph::vertex_descriptor> > edgesToBeRemoved;
+        double maxBetweenness = 0;
+
+        for (auto const& iter : betweenness){
+            //cout << "Edge: ( " << iter.first.first << ", " << iter.first.second << " ): " << iter.second << endl;
+
+            if (maxBetweenness < iter.second){
+                maxBetweenness = iter.second;
+                edgesToBeRemoved.clear();
+                edgesToBeRemoved.push_back(iter.first);
+            }
+            else if (maxBetweenness == iter.second)
+                edgesToBeRemoved.push_back(iter.first);
+        }
+
+        cout << endl;
+
+        for (int i = 0; i < edgesToBeRemoved.size(); i++){
+            for (auto edge : boost::make_iterator_range(edges(g))){
+                if (edgesToBeRemoved[i].first == edge.m_source && edgesToBeRemoved[i].second == edge.m_target){
+                    cout << "Removed Edge: " << edge << endl;
+                    g.remove_edge(edge);
+                    break;
+                }
+            }
+        }
+
+        currModularity = calculateModularity(oldG, g);
+
+        if (count!=0 && maxModularity >= currModularity){
+            cout << "Following the removal of the previous edge, the current modularity (" << currModularity +0.05
+                 << ") went beyond the max modularity (" << maxModularity << ")\n"
+                 << "As such the graph will regress back to the state prior to the removal of the last edge." << endl;
+            g = oldG;
+            break;
+        }
+        count++;
+        maxModularity = currModularity;
+    }
+
 //    for (int i = 0; i < g.m_vertices.at(0).m_out_edges.size(); i++){
 //        cout << g.m_vertices.at(0).m_out_edges[i].m_target << endl;
 //    }
 
-    auto betweenness = edgeBetweenness(g);
+    /*auto betweenness = edgeBetweenness(g);
 
     vector <pair<Graph::vertex_descriptor,Graph::vertex_descriptor> > edgesToBeRemoved;
     double maxBetweenness = 0;
@@ -66,9 +127,20 @@ int main() {
                 break;
             }
         }
-    }
+    }*/
 
-    cout << "\nBetweenness after edge removal:" << endl;
+    std::vector< int > component(num_vertices(g));
+    int num = connected_components(g, &component[0]);
+
+    std::vector< int >::size_type i;
+    cout << "Total number of components: " << num << endl;
+    for (i = 0; i != component.size(); ++i)
+        cout << "Vertex " << i << " is in component " << component[i]
+             << endl;
+    cout << endl;
+
+
+    /*cout << "\nBetweenness after edge removal:" << endl;
 
     betweenness = edgeBetweenness(g);
 
@@ -85,7 +157,7 @@ int main() {
         }
         else if (maxBetweenness == iter.second)
             edgesToBeRemoved.push_back(iter.first);
-    }
+    }*/
 
 
     return 0;
@@ -239,5 +311,39 @@ std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> edgeB
     }
     scaling (edge_centralities);
     return edge_centralities;
+}
 
+double calculateModularity(Graph& oldG, Graph& newG){
+
+    //boost::adjacent_vertices(v,g);
+    //m_out_edges.size() for ki and kj
+
+    double res = 0;
+
+    std::vector< double > componentOld(num_vertices(oldG));
+    double numCom_old = connected_components(oldG, &componentOld[0]);
+
+    std::vector< double > componentNew(num_vertices(oldG));
+    double numCom_new = connected_components(oldG, &componentNew[0]);
+
+    for (auto oldV : boost::make_iterator_range(vertices(oldG))){
+
+        auto adjacent_old = boost::adjacent_vertices(oldV,oldG);
+
+        for (auto newV : boost::make_iterator_range(vertices(newG))){
+            double A = 0;
+            for (auto adj : make_iterator_range(adjacent_old)) {
+                if (adj == newV) {
+                    A = 1;
+                    break;
+                }
+            }
+
+            res += A - ((numCom_old * numCom_new) / (double)(oldG.m_edges.size() * 2));
+
+        }
+
+    }
+
+    return res/(double)(oldG.m_edges.size() * 2);
 }
