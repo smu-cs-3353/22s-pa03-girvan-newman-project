@@ -1,0 +1,135 @@
+Community 1
+NorthTexas's label is 11
+ArkansasState's label is 11
+BoiseState's label is 11
+Idaho's label is 11
+NewMexicoState's label is 11
+UtahState's label is 11
+
+Community 2
+Auburn's label is 17
+Alabama's label is 17
+Florida's label is 17
+CentralFlorida's label is 17
+Kentucky's label is 17
+LouisianaTech's label is 17
+LouisianaMonroe's label is 17
+Vanderbilt's label is 17
+MiddleTennesseeState's label is 17
+MississippiState's label is 17
+SouthCarolina's label is 17
+Tennessee's label is 17
+Mississippi's label is 17
+Georgia's label is 17
+LouisianaState's label is 17
+LouisianaLafayette's label is 17
+Arkansas's label is 17
+
+Community 3
+KansasState's label is 52
+TexasTech's label is 52
+Baylor's label is 52
+Colorado's label is 52
+Kansas's label is 52
+IowaState's label is 52
+Nebraska's label is 52
+TexasA&amp;M's label is 52
+Oklahoma's label is 52
+Texas's label is 52
+Missouri's label is 52
+OklahomaState's label is 52
+
+Community 4
+EastCarolina's label is 91
+Houston's label is 91
+Louisville's label is 91
+Memphis's label is 91
+SouthernMississippi's label is 91
+Tulane's label is 91
+Army's label is 91
+Cincinnati's label is 91
+AlabamaBirmingham's label is 91
+
+Community 5
+BrighamYoung's label is 93
+NewMexico's label is 93
+SanDiegoState's label is 93
+Wyoming's label is 93
+Utah's label is 93
+ColoradoState's label is 93
+FresnoState's label is 93
+Rice's label is 93
+SouthernMethodist's label is 93
+Nevada's label is 93
+SanJoseState's label is 93
+TexasElPaso's label is 93
+Tulsa's label is 93
+AirForce's label is 93
+NevadaLasVegas's label is 93
+TexasChristian's label is 93
+Hawaii's label is 93
+
+Community 6
+NorthernIllinois's label is 99
+WesternMichigan's label is 99
+Akron's label is 99
+BallState's label is 99
+BowlingGreenState's label is 99
+Buffalo's label is 99
+CentralMichigan's label is 99
+Connecticut's label is 99
+EasternMichigan's label is 99
+Kent's label is 99
+MiamiOhio's label is 99
+Ohio's label is 99
+Toledo's label is 99
+Marshall's label is 99
+
+Community 7
+Iowa's label is 100
+PennState's label is 100
+Northwestern's label is 100
+Wisconsin's label is 100
+Michigan's label is 100
+Purdue's label is 100
+OhioState's label is 100
+Minnesota's label is 100
+Illinois's label is 100
+MichiganState's label is 100
+Indiana's label is 100
+
+Community 8
+VirginiaTech's label is 101
+BostonCollege's label is 101
+WestVirginia's label is 101
+Syracuse's label is 101
+Pittsburgh's label is 101
+Temple's label is 101
+Navy's label is 101
+NotreDame's label is 101
+Rutgers's label is 101
+MiamiFlorida's label is 101
+
+Community 9
+FloridaState's label is 105
+NorthCarolinaState's label is 105
+Virginia's label is 105
+GeorgiaTech's label is 105
+Duke's label is 105
+NorthCarolina's label is 105
+Clemson's label is 105
+WakeForest's label is 105
+Maryland's label is 105
+
+Community 10
+SouthernCalifornia's label is 111
+ArizonaState's label is 111
+UCLA's label is 111
+Arizona's label is 111
+Washington's label is 111
+Oregon's label is 111
+Stanford's label is 111
+WashingtonState's label is 111
+OregonState's label is 111
+California's label is 111
+
