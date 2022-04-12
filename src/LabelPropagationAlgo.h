@@ -17,6 +17,10 @@
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/range/irange.hpp>
 
+#include <boost/graph/graph_utility.hpp>
+#include <boost/property_map/property_map.hpp>
+#include <boost/property_map/dynamic_property_map.hpp>
+
 using namespace boost;
 
 class LabelPropagationAlgo {

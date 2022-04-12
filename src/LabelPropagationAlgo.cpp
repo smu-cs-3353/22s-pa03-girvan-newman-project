@@ -5,16 +5,24 @@
 #include "LabelPropagationAlgo.h"
 
 void LabelPropagationAlgo::runAlgo() {
-    typedef adjacency_list<vecS, vecS, undirectedS, no_property, no_property> Graph;
+    struct VertexProperty { //stores the data key in football.graphml
+        long dataKey;
+    };
+
+    typedef adjacency_list<vecS, vecS, undirectedS, VertexProperty> Graph;
     typedef dynamic_properties Dproperty;
 
     Graph g;
     Dproperty dp;
 
+    dp.property("value", boost::get(&VertexProperty::dataKey, g));
+
     //std::ifstream graphFile ("../RandomGraphs/randomGraph.graphml");
     //std::ifstream graphFile("../RandomGraphs/tester.graphml");
     //std::ifstream graphFile("../RandomGraphs/bigGraph.graphml");
-    std::ifstream graphFile("../RandomGraphs/karateClub.graphml");
+    //std::ifstream graphFile("../RandomGraphs/karateClub.graphml");
+    std::ifstream graphFile("../RandomGraphs/football.graphml");
+//    std::ifstream graphFile("../RandomGraphs/words.graphml");
 
     read_graphml(graphFile, g, dp);
 
@@ -41,7 +49,7 @@ void LabelPropagationAlgo::runAlgo() {
 //        }
     }
 
-    while (true) {
+    while (true) { //loop that runs until all nodes have the same label as the majority of their neighbor nodes
         std::shuffle(nodes.begin(), nodes.end(), std::mt19937(std::random_device()())); //randomly shuffles the order in which the nodes will be visited
         for (int i : nodes) {
             std::cout << i << " ";
@@ -85,6 +93,7 @@ void LabelPropagationAlgo::runAlgo() {
 
         for (auto v: boost::make_iterator_range(vertices(g))) {
             std::cout << "Node " << v << "'s label is " << node_labels[v] << std::endl;
+            //std::cout << "Node " << v << "'s data key is " << dp(v) << std::endl;
         }
 
         bool endAlgo = true; //variable that tells the label propagation to stop
@@ -105,6 +114,7 @@ void LabelPropagationAlgo::runAlgo() {
                 break;
             }
         }
+        endAlgo = true; //FIXME temporarily stop after 1 iteration
 
         if (endAlgo) {
             break;
