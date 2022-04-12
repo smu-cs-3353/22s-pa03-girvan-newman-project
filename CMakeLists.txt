@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(22s_pa03_girvan_newman_a_loner_s_regret)
 
-add_executable(22s_pa03_girvan_newman_a_loner_s_regret src/girvan-newman_algo/main.cpp)
+add_executable(22s_pa03_girvan_newman_a_loner_s_regret src/main.cpp src/GirvanNewman.cpp src/GirvanNewman.h)
 
 # Configure Files
 # file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
