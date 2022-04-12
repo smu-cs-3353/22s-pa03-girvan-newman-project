@@ -319,6 +319,13 @@ double calculateModularity(Graph& oldG, Graph& newG){
 
     double res = 0;
 
+    // Iterating through the old vertices range
+    // Getting the adjacent vertices and counts how many of them there are before going into the inner loop
+    // The inner loop does the same thing at the start getting the adjacent vertices and counts how many there are
+    // Then it goes on to check if the vertex in the new graph is still adjacent to the old vertices
+    // If it is then it A will = 1, if not A = 0
+    // Amd then it will run the equation and increment itself with each loop
+
     for (auto oldV : boost::make_iterator_range(vertices(oldG))){
 
         auto adjacent_old = boost::adjacent_vertices(oldV,oldG);
@@ -351,7 +358,8 @@ double calculateModularity(Graph& oldG, Graph& newG){
                     break;
                 }
             }
-
+            //old_numAttached = size of community old vertex is in
+            //new_numAttached = size of community new vertex is in
             res += A - ((old_numAttached * new_numAttached) / (double)(oldG.m_edges.size() * 2));
         }
 
