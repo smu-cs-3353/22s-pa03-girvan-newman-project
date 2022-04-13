@@ -10,7 +10,10 @@ GirvanNewman::GirvanNewman() {
 
     dp.property("value", boost::get(&VertexProperty::dataKey, g));
 
-    std::ifstream graphFile ("../RandomGraphs/barbell_example.graphml");
+    string fullPathName = "../RandomGraphs/football.graphml";
+
+    std::ifstream graphFile (fullPathName);
+    std::string fileName = fullPathName.substr(fullPathName.find_last_of("/\\") + 1);
 
     read_graphml(graphFile, g, dp);
 
@@ -43,12 +46,12 @@ GirvanNewman::GirvanNewman() {
                 edgesToBeRemoved.push_back(iter.first);
         }
 
-        cout << endl;
+        //cout << endl;
 
         for (int i = 0; i < edgesToBeRemoved.size(); i++){
             for (auto edge : boost::make_iterator_range(edges(g))){
                 if (edgesToBeRemoved[i].first == edge.m_source && edgesToBeRemoved[i].second == edge.m_target){
-                    cout << "Removed Edge: " << edge << endl;
+                    //cout << "Removed Edge: " << edge << endl;
                     g.remove_edge(edge);
                     break;
                 }
@@ -57,14 +60,14 @@ GirvanNewman::GirvanNewman() {
 
         currModularity = calculateModularity(oldG, g, edgeCount);
 
-        cout << currModularity << endl;
+        //cout << currModularity << endl;
 
 
 
         if (count != 0 && maxModularity >= currModularity + .002){
-            cout << "Following the removal of the previous edge, the current modularity (" << currModularity + .002
+            /*cout << "Following the removal of the previous edge, the current modularity (" << currModularity + .002
                  << ") is unable to exceed the max modularity (" << maxModularity << ")\n"
-                 << "As such the graph will regress back to the state prior to the removal of the last edge(s)." << endl;
+                 << "As such the graph will regress back to the state prior to the removal of the last edge(s)." << endl;*/
             g = oldG;
             break;
         }
@@ -72,23 +75,90 @@ GirvanNewman::GirvanNewman() {
         maxModularity = currModularity;
     }
 
-    std::vector< int > component(num_vertices(g));
-    int num = connected_components(g, &component[0]);
+    if (fileName == "football.graphml") {
 
-    std::vector< int >::size_type i;
-    cout << "Total number of components: " << num << endl;
-    for (i = 0; i != component.size(); ++i)
-        cout << "Vertex " << i << " is in component " << component[i] << endl;
-    cout << endl;
+        std::vector<int> component(num_vertices(g));
+        int num = connected_components(g, &component[0]);
 
-    //ofstream output("test.graphml");
+        /*std::vector< int >::size_type i;
+        cout << "Total number of components: " << num << endl;
+        for (i = 0; i != component.size(); ++i)
+            cout << "Vertex " << i << " is in component " << component[i] << endl;
+        cout << endl;*/
 
-    //write_graphml(output, g, dp, true);
+        std::vector<int> labels; //holds all the labels that define each community
 
-    //ofstream output2("output.txt");
+        std::ofstream output("../extra/outputForGraph_GN.txt");
 
-    //for (auto v : make_iterator_range(vertices(g)))
-    //    output2 << component [v] << endl;
+
+        for (auto v: boost::make_iterator_range(vertices(g))) {
+            if (std::find(labels.begin(), labels.end(), component[v]) == labels.end()) {
+                labels.push_back(component[v]);
+            }
+            output << component[v] << std::endl;
+        }
+
+        output.close();
+
+        std::sort(labels.begin(), labels.end()); //sorts the vector by increasing numerical order
+
+        output.open("../output/GNOutput.txt"); //output file containing data on the communities
+
+        output << "Communities For Girvan-Newman:\n" << std::endl;
+        std::cout << "Communities For Girvan-Newman:\n" << std::endl;
+
+        for (int i = 0; i < labels.size(); i++) { //outputs the communities generated
+            std::cout << "Community " << i + 1 << std::endl;
+            cout << endl;
+            output << "Community " << i + 1 << std::endl;
+            output << endl;
+            std::ifstream input("../extra/schoolNames.txt");
+            int counter2 = 0;
+            while (!input.eof()) {
+                std::string name;
+                input >> name;
+                if (component[counter2] == labels.at(i)) {
+                    if (name != "") {
+                        std::cout << name << " (" << counter2 << ")" << std::endl;
+                        output << name << " (" << counter2 << ")" << std::endl;
+                    }
+                }
+                counter2++;
+            }
+            input.close();
+            std::cout << std::endl;
+            output << std::endl;
+        }
+    }
+    else{
+
+        std::vector<int> component(num_vertices(g));
+        int num = connected_components(g, &component[0]);
+        map<int, vector<Graph::vertex_descriptor> > nodesInCommunities;
+
+        for (auto v: boost::make_iterator_range(vertices(g)))
+            nodesInCommunities[component[v]].push_back(v);
+
+        std::ofstream output("../output/GNOutput.txt");
+
+        output << "Communities For Girvan-Newman:\n" << std::endl;
+        std::cout << "Communities For Girvan-Newman:\n" << std::endl;
+
+        for (auto const& iter : nodesInCommunities){
+            std::cout << "Community " << iter.first + 1 << std::endl;
+            cout << endl;
+            output << "Community " << iter.first + 1 << std::endl;
+            output << endl;
+            for (int i = 0; i < iter.second.size(); i++){
+                cout << iter.second[i] << endl;
+                output << iter.second[i] << endl;
+
+            }
+            cout << endl;
+            output << endl;
+
+        }
+    }
 }
 
 void GirvanNewman::scaling (std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> &betweenness){
