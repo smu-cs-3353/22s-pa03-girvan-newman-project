@@ -4,13 +4,13 @@
 
 #include "GirvanNewman.h"
 
-GirvanNewman::GirvanNewman() {
+void GirvanNewman::runAlgo(char* filePath) {
     Graph g;
     Dproperty dp;
 
     dp.property("value", boost::get(&VertexProperty::dataKey, g));
 
-    string fullPathName = "../RandomGraphs/football.graphml";
+    string fullPathName = filePath;
 
     std::ifstream graphFile (fullPathName);
     std::string fileName = fullPathName.substr(fullPathName.find_last_of("/\\") + 1);

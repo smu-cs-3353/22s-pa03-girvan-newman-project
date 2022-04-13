@@ -4,7 +4,7 @@
 
 #include "LabelPropagationAlgo.h"
 
-void LabelPropagationAlgo::runAlgo() {
+void LabelPropagationAlgo::runAlgo(char* filePath) {
     struct VertexProperty { //stores the data key in football.graphml
         long dataKey;
     };
@@ -17,7 +17,7 @@ void LabelPropagationAlgo::runAlgo() {
 
     dp.property("value", boost::get(&VertexProperty::dataKey, g));
 
-    std::string fullPathName = "../RandomGraphs/football.graphml";
+    std::string fullPathName = filePath;
 
     std::ifstream graphFile (fullPathName);
     std::string fileName = fullPathName.substr(fullPathName.find_last_of("/\\") + 1);
@@ -53,10 +53,10 @@ void LabelPropagationAlgo::runAlgo() {
 
             std::vector<int> new_label_options;
 
-            for (int i = 0; i < neighbor_nodes[v].size(); i++) {
+            for (int i = 0; i < neighbor_nodes[v].size(); i++) { //loops through the current node's neighbor nodes
                 label_frequency[node_labels[neighbor_nodes[v].at(i)]] += 1;
 
-                if (label_frequency[node_labels[neighbor_nodes[v].at(i)]] > new_label_frequency) {
+                if (label_frequency[node_labels[neighbor_nodes[v].at(i)]] > new_label_frequency) { //if a new most frequent label is found
                     new_label = node_labels[neighbor_nodes[v].at(i)];
                     new_label_frequency = label_frequency[node_labels[neighbor_nodes[v].at(i)]]; //updates the label frequency
 
@@ -68,11 +68,10 @@ void LabelPropagationAlgo::runAlgo() {
                     new_label_options.push_back(node_labels[neighbor_nodes[v].at(i)]);
                 }
             }
-
             if (!new_label_options.empty()) { //if multiple neighbor node labels appear the same number of times
                 std::shuffle(new_label_options.begin(), new_label_options.end(), std::mt19937(std::random_device()())); //randomly shuffles the options
-                node_labels[v] = new_label_options.at(0);
-            } else {
+                node_labels[v] = new_label_options.at(0); //assigns a random option to be the new label
+            } else { //if there is only one label that appears most frequent
                 node_labels[v] = new_label;
             }
 
@@ -84,7 +83,7 @@ void LabelPropagationAlgo::runAlgo() {
             int inCommon = 0; //counts how many neighbor nodes have the same label as the current node
             //label propagation can stop if the current node has the most frequent label among its neighbor nodes
             std::unordered_map<int, int> label_frequency;
-            int most_frequent_frequency = 0;
+            int most_frequent_frequency = 0; //stores how many times the most frequent label appears
 
             for (int i = 0; i < neighbor_nodes[v].size(); i++) {
                 if (node_labels[neighbor_nodes[v].at(i)] == node_labels[v]) { //if the current node and the neighbor node have the same label
@@ -94,7 +93,6 @@ void LabelPropagationAlgo::runAlgo() {
                 label_frequency[node_labels[neighbor_nodes[v].at(i)]] += 1;
 
                 if (label_frequency[node_labels[neighbor_nodes[v].at(i)]] > most_frequent_frequency) {
-                    //most_frequent = node_labels[neighbor_nodes[v].at(i)];
                     most_frequent_frequency = label_frequency[node_labels[neighbor_nodes[v].at(i)]];
                 }
             }
@@ -110,7 +108,7 @@ void LabelPropagationAlgo::runAlgo() {
         }
         counter++;
     }
-    if (fileName == "football.graphml") {
+    if (fileName == "football.graphml") { //for the football dataset
 
         std::vector<int> labels; //holds all the labels that define each community
 
@@ -155,7 +153,7 @@ void LabelPropagationAlgo::runAlgo() {
             output << std::endl;
         }
     }
-    else{
+    else { //for other datasets
 
         std::map<int, std::vector<Graph::vertex_descriptor> > nodesInCommunities;
 

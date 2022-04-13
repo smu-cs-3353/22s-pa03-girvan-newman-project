@@ -2,97 +2,6 @@ Communities For Label Propagation:
 
 Community 1
 
-NorthTexas (11)
-ArkansasState (24)
-BoiseState (28)
-Idaho (50)
-NewMexicoState (69)
-UtahState (90)
-
-Community 2
-
-BrighamYoung (0)
-NewMexico (4)
-SanDiegoState (9)
-Wyoming (16)
-Utah (23)
-ColoradoState (41)
-AirForce (93)
-NevadaLasVegas (104)
-
-Community 3
-
-VirginiaTech (19)
-BostonCollege (29)
-WestVirginia (30)
-Syracuse (35)
-EastCarolina (44)
-Houston (48)
-Pittsburgh (55)
-Louisville (57)
-Memphis (66)
-SouthernMississippi (75)
-Temple (79)
-Navy (80)
-NotreDame (82)
-Tulane (86)
-Army (91)
-Cincinnati (92)
-Rutgers (94)
-MiamiFlorida (101)
-AlabamaBirmingham (112)
-
-Community 4
-
-FloridaState (1)
-NorthCarolinaState (25)
-Virginia (33)
-GeorgiaTech (37)
-Duke (45)
-NorthCarolina (89)
-Clemson (103)
-WakeForest (105)
-Maryland (109)
-
-Community 5
-
-Auburn (17)
-Alabama (20)
-Florida (27)
-Kentucky (56)
-LouisianaTech (58)
-LouisianaMonroe (59)
-Vanderbilt (62)
-MiddleTennesseeState (63)
-MississippiState (65)
-SouthCarolina (70)
-Tennessee (76)
-Mississippi (87)
-Georgia (95)
-LouisianaState (96)
-LouisianaLafayette (97)
-Arkansas (113)
-
-Community 6
-
-NorthernIllinois (12)
-WesternMichigan (14)
-Akron (18)
-BallState (26)
-BowlingGreenState (31)
-Buffalo (34)
-CentralFlorida (36)
-CentralMichigan (38)
-Connecticut (42)
-EasternMichigan (43)
-Kent (54)
-MiamiOhio (61)
-Ohio (71)
-Toledo (85)
-Marshall (99)
-
-Community 7
-
 Iowa (2)
 PennState (6)
 Northwestern (13)
@@ -105,34 +14,7 @@ Illinois (64)
 MichiganState (100)
 Indiana (106)
 
-Community 8
-
-FresnoState (46)
-Rice (49)
-SouthernMethodist (53)
-Nevada (67)
-SanJoseState (73)
-TexasElPaso (83)
-Tulsa (88)
-TexasChristian (110)
-Hawaii (114)
-
-Community 9
-
-KansasState (3)
-TexasTech (5)
-Baylor (10)
-Colorado (40)
-Kansas (52)
-IowaState (72)
-Nebraska (74)
-TexasA&amp;M (81)
-Oklahoma (84)
-Texas (98)
-Missouri (102)
-OklahomaState (107)
-
-Community 10
+Community 2
 
 SouthernCalifornia (7)
 ArizonaState (8)
@@ -144,4 +26,125 @@ Stanford (77)
 WashingtonState (78)
 OregonState (108)
 California (111)
+
+Community 3
+
+NorthernIllinois (12)
+WesternMichigan (14)
+BallState (26)
+CentralMichigan (38)
+EasternMichigan (43)
+Toledo (85)
+
+Community 4
+
+FresnoState (46)
+Rice (49)
+SouthernMethodist (53)
+Nevada (67)
+SanJoseState (73)
+TexasElPaso (83)
+Tulsa (88)
+TexasChristian (110)
+Hawaii (114)
+
+Community 5
+
+FloridaState (1)
+NorthCarolinaState (25)
+Virginia (33)
+GeorgiaTech (37)
+Duke (45)
+NorthCarolina (89)
+Clemson (103)
+WakeForest (105)
+Maryland (109)
+
+Community 6
+
+BrighamYoung (0)
+NewMexico (4)
+SanDiegoState (9)
+Wyoming (16)
+Utah (23)
+ColoradoState (41)
+AirForce (93)
+NevadaLasVegas (104)
+
+Community 7
+
+Akron (18)
+BowlingGreenState (31)
+Buffalo (34)
+Connecticut (42)
+Kent (54)
+MiamiOhio (61)
+Ohio (71)
+Marshall (99)
+
+Community 8
+
+Auburn (17)
+Alabama (20)
+Florida (27)
+CentralFlorida (36)
+Kentucky (56)
+LouisianaTech (58)
+LouisianaMonroe (59)
+Vanderbilt (62)
+MiddleTennesseeState (63)
+MississippiState (65)
+SouthCarolina (70)
+Tennessee (76)
+Mississippi (87)
+Georgia (95)
+LouisianaState (96)
+Arkansas (113)
+
+Community 9
+
+KansasState (3)
+TexasTech (5)
+Baylor (10)
+NorthTexas (11)
+ArkansasState (24)
+BoiseState (28)
+Colorado (40)
+Idaho (50)
+Kansas (52)
+NewMexicoState (69)
+IowaState (72)
+Nebraska (74)
+TexasA&amp;M (81)
+Oklahoma (84)
+UtahState (90)
+LouisianaLafayette (97)
+Texas (98)
+Missouri (102)
+OklahomaState (107)
+
+Community 10
+
+VirginiaTech (19)
+BostonCollege (29)
+WestVirginia (30)
+Syracuse (35)
+Pittsburgh (55)
+Temple (79)
+Navy (80)
+NotreDame (82)
+Rutgers (94)
+MiamiFlorida (101)
+
+Community 11
+
+EastCarolina (44)
+Houston (48)
+Louisville (57)
+Memphis (66)
+SouthernMississippi (75)
+Tulane (86)
+Army (91)
+Cincinnati (92)
+AlabamaBirmingham (112)
 

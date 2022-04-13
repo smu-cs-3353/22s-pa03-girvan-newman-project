@@ -25,11 +25,15 @@ typedef adjacency_list<vecS, vecS, undirectedS, VertexProperty> Graph;
 typedef dynamic_properties Dproperty;
 
 class GirvanNewman {
-public:
-    GirvanNewman();
+private:
     void scaling (std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> &);
     std::map<pair<Graph::vertex_descriptor,Graph::vertex_descriptor> , double> edgeBetweenness (Graph &);
     double calculateModularity(Graph& oldG, Graph& newG, double);
+
+public:
+    void runAlgo(char*);
+
+
 
 };
 

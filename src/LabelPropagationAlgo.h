@@ -25,10 +25,8 @@
 using namespace boost;
 
 class LabelPropagationAlgo {
-    private:
-
     public:
-        void runAlgo();
+        void runAlgo(char*);
 };
 
 

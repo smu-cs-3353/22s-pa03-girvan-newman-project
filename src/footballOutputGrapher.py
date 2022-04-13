@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 val_map = { }
 
-f = open('../extra/output.txt', 'r')
+f = open('../extra/outputForGraph_GN.txt', 'r')
 f2 = open('../extra/schoolNames.txt', 'r')
 
 for label in f:

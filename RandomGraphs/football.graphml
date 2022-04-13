@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 <key id="d0" for="node" attr.name="value" attr.type="long"/>
-<graph edgedefault="undirected"><node id="BrighamYoung">
+<graph edgedefault="undirected">
+<node id="BrighamYoung">
   <data key="d0">7</data>
 </node>
 <node id="FloridaState">
