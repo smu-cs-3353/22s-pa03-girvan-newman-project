@@ -17,12 +17,15 @@ void LabelPropagationAlgo::runAlgo() {
 
     dp.property("value", boost::get(&VertexProperty::dataKey, g));
 
-    std::ifstream graphFile("../RandomGraphs/football.graphml");
+    std::string fullPathName = "../RandomGraphs/football.graphml";
+
+    std::ifstream graphFile (fullPathName);
+    std::string fileName = fullPathName.substr(fullPathName.find_last_of("/\\") + 1);
 
     read_graphml(graphFile, g, dp);
 
     std::map<int, int> node_labels; //holds the current label for each node
-    std::map<int, std::vector<int>> neighbor_nodes; //holds the labels of the current node's neighbors
+    std::map<int, std::vector<int> > neighbor_nodes; //holds the labels of the current node's neighbors
 
     std::vector<int> nodes; //holds each node in the graph
 
@@ -107,40 +110,77 @@ void LabelPropagationAlgo::runAlgo() {
         }
         counter++;
     }
+    if (fileName == "football.graphml") {
 
-    std::vector<int> labels; //holds all the labels that define each community
+        std::vector<int> labels; //holds all the labels that define each community
 
-    std::ofstream output("../extra/outputForGraph.txt");
+        std::ofstream output("../extra/outputForGraph.txt");
 
-    for (auto v: boost::make_iterator_range(vertices(g))) {
-        if (std::find(labels.begin(), labels.end(), node_labels[v]) == labels.end()) {
-            labels.push_back(node_labels[v]);
-        }
-        output << node_labels[v] << std::endl;
-    }
-
-    output.close();
-
-    std::sort(labels.begin(), labels.end()); //sorts the vector by increasing numerical order
-
-    output.open("../output/LabelPropagationOutput.txt"); //output file containing data on the communities
-
-    for (int i = 0; i < labels.size(); i++) { //outputs the communities generated
-        std::cout << "Community " << i + 1 << std::endl;
-        output << "Community " << i + 1 << std::endl;
-        std::ifstream input("../extra/schoolNames.txt");
-        int counter2 = 0;
-        while (!input.eof()) {
-            std::string name;
-            input >> name;
-            if (node_labels[counter2] == labels.at(i)) {
-                std::cout << name << "'s label is " << node_labels[counter2] << std::endl;
-                output << name << "'s label is " << node_labels[counter2] << std::endl;
+        for (auto v: boost::make_iterator_range(vertices(g))) {
+            if (std::find(labels.begin(), labels.end(), node_labels[v]) == labels.end()) {
+                labels.push_back(node_labels[v]);
             }
-            counter2++;
+            output << node_labels[v] << std::endl;
         }
-        input.close();
-        std::cout << std::endl;
-        output << std::endl;
+
+        output.close();
+
+        std::sort(labels.begin(), labels.end()); //sorts the vector by increasing numerical order
+
+        output.open("../output/LabelPropagationOutput.txt"); //output file containing data on the communities
+
+        output << "Communities For Label Propagation:\n" << std::endl;
+        std::cout << "Communities For Label Propagation:\n" << std::endl;
+
+        for (int i = 0; i < labels.size(); i++) { //outputs the communities generated
+            std::cout << "Community " << i + 1 << std::endl;
+            std::cout << std::endl;
+            output << "Community " << i + 1 << std::endl;
+            output << std::endl;
+            std::ifstream input("../extra/schoolNames.txt");
+            int counter2 = 0;
+            while (!input.eof()) {
+                std::string name;
+                input >> name;
+                if (node_labels[counter2] == labels.at(i)) {
+                    if (name != "") {
+                        std::cout << name << " (" << counter2 << ")" << std::endl;
+                        output << name << " (" << counter2 << ")" << std::endl;
+                    }
+                }
+                counter2++;
+            }
+            input.close();
+            std::cout << std::endl;
+            output << std::endl;
+        }
+    }
+    else{
+
+        std::map<int, std::vector<Graph::vertex_descriptor> > nodesInCommunities;
+
+        for (auto v: boost::make_iterator_range(vertices(g)))
+            nodesInCommunities[node_labels[v]].push_back(v);
+
+        std::ofstream output("../output/LabelPropagationOutput.txt");
+
+        output << "Communities For Label Propagation:\n" << std::endl;
+        std::cout << "Communities For Label Propagation:\n" << std::endl;
+
+        int count = 1;
+        for (auto const& iter : nodesInCommunities){
+            std::cout << "Community " << count << std::endl;
+            std::cout << std::endl;
+            output << "Community " << count << std::endl;
+            output << std::endl;
+            for (int i = 0; i < iter.second.size(); i++){
+                std::cout << iter.second[i] << std::endl;
+                output << iter.second[i] << std::endl;
+
+            }
+            std::cout << std::endl;
+            output << std::endl;
+            count++;
+        }
     }
 }

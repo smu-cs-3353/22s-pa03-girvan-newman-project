@@ -20,6 +20,7 @@
 #include <boost/graph/graph_utility.hpp>
 #include <boost/property_map/property_map.hpp>
 #include <boost/property_map/dynamic_property_map.hpp>
+#include <boost/graph/connected_components.hpp>
 
 using namespace boost;
 
