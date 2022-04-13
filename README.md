@@ -2,7 +2,7 @@
 
 By: Braiden Hook and Michael Doherty
 
-Medium Article links:
+Medium Article Links:
 
 https://medium.com/@bghook/community-detection-label-propagation-vs-girvan-newman-part-1-c7f8680062c8
 
@@ -18,7 +18,7 @@ Follow these steps using the command line to execute the program:
 
 1. Clone the git repo using the command line:
 
-        git clone https://github.com/smu-cs-3353/22s-pa02-braidenh
+        git clone https://github.com/smu-cs-3353/22s-pa03-girvan-newman-a-loner-s-regret
         
 2. Navigate back to the main directory which contains the CMakeLists.txt.
 3. Create a build directory with:
