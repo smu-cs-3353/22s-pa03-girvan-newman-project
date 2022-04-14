@@ -58,7 +58,7 @@ There will be two output files, one for girvan-newman, and one for label propaga
 
 When reading in the football graph inside the RandomGraphs folder, it will print out the names followed by the node id in parentheses.
 
-(football output pic)
+![alt text](OutputImages/Football_Output_Pic.png)
 
 There will be four output files, one for the community structure like above picture, and another .txt found in the extra folder that will be necessary for the footballOutputGrapher.py.
 
@@ -77,7 +77,7 @@ We slightly adjusted the last part to have the program stop by calculating the m
 
 As the number of edges increased, the time it took for the algorithm to finish grew exponentially. Below is a graph of 100 vertices showcasing this:
 
-(picture of time efficiency for GN)
+![alt text](OutputImages/GN_Time_Complexity.png)
 
 As such, this algorithm won’t be as viable on larger datasets.
 
@@ -144,7 +144,7 @@ This is unlike other algorithms like the label propagation algorithm (the second
 
 The average time to run the Girvan-Newman algorithm on the football graph was 27 seconds. It outputted 12 communities with many of the football teams in the correct conference. The only hit was that Central Florida was left all alone in one community. The reason is unknown, it could be due to the dataset itself, or it could be because of how Girvan-Newman works. Below here is the graph output after running it through the footballOutputGrapher.py:
 
-(football graph)
+![alt text](OutputImages/Football_Graph_Pic.png)
 
 ## Label Propagation
 
