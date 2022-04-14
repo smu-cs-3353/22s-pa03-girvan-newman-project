@@ -12,7 +12,7 @@ Part 2: https://medium.com/@mikecamdo/community-detection-label-propagation-vs-g
 
 In this project we impletemented the community detection algorithm proposed by Girvan and Newman on computer randomized graphs and the college football dataset.
 
-## How to build and execute
+## How to Build and Execute
 
 Follow these steps using the command line to execute the program:
 
