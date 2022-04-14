@@ -79,7 +79,7 @@ As the number of edges increased, the time it took for the algorithm to finish g
 
 As such, this algorithm won’t be as viable on larger datasets.
 
-### Output consistency
+### Output Consistency
 
 Every input as one output, meaning you will receive the same number of communities for one dataset no matter how many times you rerun it. As such, if you run the randomGraph2.graphml in the RandomGraphs folder, you will receive the same output as this:
 
