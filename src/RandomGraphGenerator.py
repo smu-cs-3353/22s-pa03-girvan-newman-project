@@ -3,15 +3,15 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
-n = 100
-p = 0.03
+n = 30
+p = 0.1
 g = nx.erdos_renyi_graph(n, p)
 
 nx.draw(g)
 plt.show()
 
-nx.write_graphml(g, "../RandomGraphs/randomGraph1.graphml")
-X = nx.read_graphml("../RandomGraphs/randomGraph1.graphml")
+nx.write_graphml(g, "../RandomGraphs/randomGraph2.graphml")
+X = nx.read_graphml("../RandomGraphs/randomGraph2.graphml")
 
 nx.draw(X)
 plt.show()
