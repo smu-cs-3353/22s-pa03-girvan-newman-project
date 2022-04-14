@@ -42,9 +42,7 @@ There are graphs available for you to use in the RandomGraphs folder, however yo
 
 ## Output
 
-After the program is complete, you will receive an output showing the community structure for the inputted graph.
-
-There are two different types of output. The first outputs the community structure while labeling the nodes with integers. The other is specialized for the college football graph.
+After the program is complete, you will receive an output showing the community structure for the inputted graph. There are two different types of output. The first outputs the community structure while labeling the nodes with integers. The other is specialized for the college football graph.
 
 ### Normal Output
 
