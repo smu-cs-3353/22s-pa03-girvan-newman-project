@@ -319,3 +319,16 @@ If you want to get the football graph, run footballOutputGrapher.py instead of R
 	Tulsa (88)
 	TexasChristian (110)
 	Hawaii (114)
+
+## References
+[1] M. Girvan and M. E. J. Newman, “Community structure in social and biological networks,” Proceedings of the National Academy of Sciences, vol. 99, no. 12, pp. 7821–7826, Jun. 2002, doi: 10.1073/pnas.122653799.
+
+[2] Raghavan, Usha Nandini, Réka Albert, and Soundar Kumara. “Near linear time algorithm to detect community structures in large-scale networks.” https://arxiv.org/pdf/0709.2938.pdf
+
+[3] “Girvan-Newman algorithm.” https://networkx.guide/algorithms/community-detection/girvan-newman/
+
+[4] “Write steps of Girvan- Newman Algorithm. Explain clustering of Social-Network Graphs using GN algorithm with example?” https://www.ques10.com/p/42323/write-steps-of-girvan-newman-algorithm-explain-clu/
+
+[5] Chiang, Jeffrey. “Girvan-Newman — The Clustering Technique in Network Analysis Part 2.” https://medium.com/analytics-vidhya/girvan-newman-the-clustering-technique-in-network-analysis-part-2-a62dfdde11e
+
+[6] “Network data.” http://www-personal.umich.edu/~mejn/netdata/
