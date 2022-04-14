@@ -154,7 +154,7 @@ Part 1: https://medium.com/@bghook/community-detection-label-propagation-vs-girv
 
 Part 2: https://medium.com/@mikecamdo/community-detection-label-propagation-vs-girvan-newman-part-2-c2fb78726db9
 
-## How to Build and Execute Python Programs:
+## How to Build and Execute Python Programs
 
 To Generate your own graphs or to run the football graph follow these two simple steps:
 
